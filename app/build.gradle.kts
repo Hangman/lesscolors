@@ -22,7 +22,7 @@ java {
 }
 
 application {
-    mainClass.set("de.pottgames.lesscolors.App")
+    mainClass.set("de.pottgames.lesscolors.app.App")
 }
 
 tasks.named<Test>("test") {
