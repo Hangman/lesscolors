@@ -16,6 +16,8 @@ import java.nio.file.Paths;
 public class App {
 
     public static void main(String[] args) {
+        long startTime = System.nanoTime();
+
         Arguments arguments = new Arguments();
         JCommander.newBuilder().addObject(arguments).build().parse(args);
 
@@ -30,6 +32,10 @@ public class App {
             e.printStackTrace(System.err);
             System.err.println("An error occurred while processing the images.");
         }
+
+        long endTime = System.nanoTime();
+        long millis = (endTime - startTime) / 1000 / 1000;
+        System.out.println("Finished in " + millis + " ms.");
     }
 
 
