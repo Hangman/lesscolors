@@ -38,10 +38,10 @@ public class App {
 
     public static void process(Arguments arguments) throws IOException {
         ColorPalette palette = App.createPaletteFromFile(arguments.paletteImagePath);
-        BufferedImage bufferedImage = ImageIO.read(new File(arguments.inputImagePath));
+        BufferedImage bufferedImage = ImageIO.read(new File(arguments.inputPath));
         Image image = new Image(bufferedImage);
-        image.convertColors(palette);
-        ImageIO.write(image.getImage(), arguments.outputImageType, new File(arguments.outputImagePath));
+        image.convertColorsByPalette(palette);
+        ImageIO.write(image.getImage(), arguments.outputImageType, new File(arguments.outputPath));
     }
 
 
@@ -52,11 +52,11 @@ public class App {
 
 
     private static boolean validateArguments(Arguments arguments) {
-        if (arguments.inputImagePath == null || arguments.inputImagePath.isEmpty()) {
+        if (arguments.inputPath == null || arguments.inputPath.isEmpty()) {
             System.err.println("Missing input image path argument.");
             return false;
         }
-        if (arguments.outputImagePath == null || arguments.outputImagePath.isEmpty()) {
+        if (arguments.outputPath == null || arguments.outputPath.isEmpty()) {
             System.err.println("Missing output image path argument.");
             return false;
         }
@@ -64,8 +64,8 @@ public class App {
             System.err.println("Missing palette image path argument.");
             return false;
         }
-        if (Files.notExists(Paths.get(arguments.inputImagePath))) {
-            System.err.println("Couldn't find file: " + arguments.inputImagePath);
+        if (Files.notExists(Paths.get(arguments.inputPath))) {
+            System.err.println("Couldn't find file: " + arguments.inputPath);
             return false;
         }
         if (Files.notExists(Paths.get(arguments.paletteImagePath))) {

@@ -4,10 +4,10 @@ import com.beust.jcommander.Parameter;
 
 public class Arguments {
     @Parameter(names = {"-input", "--input"}, description = "Path to the input image")
-    public String inputImagePath;
+    public String inputPath;
 
     @Parameter(names = {"-output", "--output"}, description = "The output image path")
-    public String outputImagePath;
+    public String outputPath;
 
     @Parameter(names = {"-output-type", "--output-type"}, description = "File format of the output image")
     public String outputImageType = "png";
