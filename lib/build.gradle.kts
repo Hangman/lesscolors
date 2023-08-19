@@ -4,8 +4,9 @@ buildscript {
 }
 
 plugins {
-    `java-library`
+    id("java-library")
     id("maven-publish")
+    id("java")
 }
 
 repositories {
@@ -26,6 +27,15 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()
+}
+
+tasks {
+    jar {
+        manifest {
+            attributes["Implementation-Title"] = project.name
+            attributes["Implementation-Version"] = project.version
+        }
+    }
 }
 
 tasks.withType<JavaCompile> {
