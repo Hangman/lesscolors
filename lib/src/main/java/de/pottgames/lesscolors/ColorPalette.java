@@ -1,7 +1,6 @@
 package de.pottgames.lesscolors;
 
-import org.jetbrains.annotations.NotNull;
-
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -10,6 +9,24 @@ public class ColorPalette implements Iterable<Color> {
 
 
     public ColorPalette(Color[] colors) {
+        this.colors = colors;
+    }
+
+
+    public ColorPalette(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int pixels = image.getWidth() * image.getHeight();
+        Color[] colors = new Color[pixels];
+        int index = 0;
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int pixel = image.getRGB(x, y);
+                colors[index++] = Color.fromArgbInt(pixel);
+            }
+        }
+
         this.colors = colors;
     }
 
@@ -30,7 +47,6 @@ public class ColorPalette implements Iterable<Color> {
     }
 
 
-    @NotNull
     @Override
     public Iterator<Color> iterator() {
         return new ColorIterator();

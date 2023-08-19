@@ -1,4 +1,29 @@
+# Gradle and project related
 .gradle
-
 build
-.idea/
+
+# IntelliJ IDEA
+.idea
+
+# Eclipse
+.classpath
+.project
+.metadata
+**/bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+.settings/
+.loadpath
+.externalToolBuilders/
+*.launch
+
+# NetBeans
+**/nbproject/private/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml

@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.ajalt.colormath:colormath:3.3.1")
+    implementation(project(":lib"))
     implementation("com.beust:jcommander:1.82")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.3")
@@ -22,7 +22,6 @@ java {
 }
 
 application {
-    // Define the main class for the application.
     mainClass.set("de.pottgames.lesscolors.App")
 }
 

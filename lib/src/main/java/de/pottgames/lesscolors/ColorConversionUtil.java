@@ -3,7 +3,7 @@ package de.pottgames.lesscolors;
 import com.github.ajalt.colormath.model.LAB;
 import com.github.ajalt.colormath.model.RGB;
 
-public class ColorConverter {
+public class ColorConversionUtil {
 
     public static float[] rgbToLab(int r, int g, int b, int alpha) {
         RGB rgb = RGB.Companion.from255(r, g, b, alpha);
@@ -14,6 +14,7 @@ public class ColorConverter {
         float labAlpha = lab.getAlpha();
         return new float[]{labL, labA, labB, labAlpha};
     }
+
 
     public static int[] labToRgb(float l, float a, float b, float alpha) {
         LAB lab = new LAB(l, a, b, alpha, LAB.Companion);

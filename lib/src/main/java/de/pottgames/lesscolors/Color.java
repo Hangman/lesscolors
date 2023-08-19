@@ -1,6 +1,5 @@
 package de.pottgames.lesscolors;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -12,7 +11,7 @@ public class Color {
     private final ColorSpace colorSpace;
 
 
-    public Color(float component1, float component2, float component3, float component4, @NotNull ColorSpace space) {
+    public Color(float component1, float component2, float component3, float component4, ColorSpace space) {
         this.component1 = component1;
         this.component2 = component2;
         this.component3 = component3;
@@ -54,7 +53,7 @@ public class Color {
             case RGB:
                 return this.copy();
             case LAB:
-                int[] rgb = ColorConverter.labToRgb(component1, component2, component3, component4);
+                int[] rgb = ColorConversionUtil.labToRgb(component1, component2, component3, component4);
                 return Color.fromRgbInt(rgb[0], rgb[1], rgb[2], rgb[3]);
             default:
                 return null;
@@ -81,7 +80,7 @@ public class Color {
             case RGB:
                 return this.copy();
             case LAB:
-                int[] rgb = ColorConverter.labToRgb(component1, component2, component3, component4);
+                int[] rgb = ColorConversionUtil.labToRgb(component1, component2, component3, component4);
                 return Color.fromRgbInt(rgb[0], rgb[1], rgb[2], rgb[3]);
             default:
                 return null;
@@ -89,7 +88,7 @@ public class Color {
     }
 
 
-    public float labDistance(@NotNull Color other) {
+    public float labDistance(Color other) {
         Color comp1 = this.colorSpace == ColorSpace.LAB ? this : this.toLab();
         Color comp2 = other.colorSpace == ColorSpace.LAB ? other : other.toLab();
         double lSquare = Math.pow(comp1.component1 - comp2.component1, 2d);

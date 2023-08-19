@@ -1,4 +1,4 @@
-package de.pottgames.lesscolors;
+package de.pottgames.lesscolors.app;
 
 import com.beust.jcommander.Parameter;
 
