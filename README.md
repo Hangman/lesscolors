@@ -1,5 +1,9 @@
 # LESSCOLORS
 
+[![Release](https://jitpack.io/v/Hangman/lesscolors.svg)](https://jitpack.io/#Hangman/lesscolors)
+[![Workflow](https://github.com/Hangman/lesscolors/actions/workflows/gradle.yml/badge.svg)](https://github.com/Hangman/lesscolors/actions/workflows/gradle.yml/badge.svg)
+[![Versioning](https://img.shields.io/badge/semver-2.0.0-blue)](https://semver.org/)
+
 LESSCOLORS is a tool designed to reduce the number of colors in an image.  
 It accomplishes this by identifying the closest color on a specified color palette and replacing the original colors
 pixel by pixel.  
