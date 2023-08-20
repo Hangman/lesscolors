@@ -1,3 +1,7 @@
+buildscript {
+    project.version = "0.1.0"
+}
+
 plugins {
     application
     id("com.github.johnrengelman.shadow") version "8.1.1"
