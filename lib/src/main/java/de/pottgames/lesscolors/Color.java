@@ -114,6 +114,29 @@ public class Color {
 
 
     /**
+     * Converts the color to the LAB color space.
+     *
+     * @return A new Color object representing the color in the LAB color space.
+     */
+    public Color toLab() {
+        switch (this.colorSpace) {
+            case RGB:
+                //  float[] lab = ColorConversionUtil.rgbToLab(component1, component2, component3, component4);
+                int r = (int) (component1 * 255f);
+                int g = (int) (component2 * 255f);
+                int b = (int) (component3 * 255f);
+                int a = (int) (component4 * 255f);
+                float[] lab = ColorConversionUtil.rgbToLab(r, g, b, a);
+                return Color.fromLab(lab[0], lab[1], lab[2], lab[3]);
+            case LAB:
+                return this.copy();
+            default:
+                return null;
+        }
+    }
+
+
+    /**
      * Converts the color to a 32-bit ARGB integer representation.
      *
      * @return An integer value representing the color in ARGB format.
@@ -129,24 +152,6 @@ public class Color {
         assert b >= 0 && b <= 255;
         assert a >= 0 && a <= 255;
         return b | g << 8 | r << 16 | a << 24;
-    }
-
-
-    /**
-     * Converts the color to the LAB color space.
-     *
-     * @return A new Color object representing the color in the LAB color space.
-     */
-    public Color toLab() {
-        switch (this.colorSpace) {
-            case RGB:
-                return this.copy();
-            case LAB:
-                int[] rgb = ColorConversionUtil.labToRgb(component1, component2, component3, component4);
-                return Color.fromRgbInt(rgb[0], rgb[1], rgb[2], rgb[3]);
-            default:
-                return null;
-        }
     }
 
 
