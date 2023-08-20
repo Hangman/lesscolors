@@ -27,16 +27,6 @@ public class ColorConversionUtil {
         return new float[]{labL, labA, labB, labAlpha};
     }
 
-    //    public static float[] rgbToLab(float r, float g, float b, float alpha) {
-    //        RGB rgb = RGB.Companion.create(new float[]{alpha, r, g, b});
-    //        LAB lab = rgb.toLAB();
-    //        float labL = lab.getL();
-    //        float labA = lab.getA();
-    //        float labB = lab.getB();
-    //        float labAlpha = lab.getAlpha();
-    //        return new float[]{labL, labA, labB, labAlpha};
-    //    }
-
 
     /**
      * Converts LAB color space components to RGB color space.
