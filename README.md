@@ -83,7 +83,7 @@ Then add lesscolors as a dependency:
 
 ```kotlin
 dependencies {
-    implementation("com.github.Hangman:lesscolors:1e4b433725")
+    implementation("com.github.Hangman:lesscolors:2197eb1972")
 }
 ```
 
