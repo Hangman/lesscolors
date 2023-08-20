@@ -136,7 +136,6 @@ public class Color {
     public Color toLab() {
         switch (this.colorSpace) {
             case RGB:
-                //  float[] lab = ColorConversionUtil.rgbToLab(component1, component2, component3, component4);
                 int r = (int) (component1 * 255f);
                 int g = (int) (component2 * 255f);
                 int b = (int) (component3 * 255f);
