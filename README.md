@@ -12,31 +12,31 @@ It is available both as a command-line application (runnable JAR) and as a Java 
 <br>
 **Warning for gamedevs:** This tool is not intended for real-time scenarios.
 
-# Use-Cases
+## Use-Cases
 
 There's probably more use cases than these, but to give you an impression of what it can do, let's check some out.
 
-## Game Assets
+### Game Assets
 
 Bring textures or other game related graphics assets to match your personal game style (e.g. your color palette).
 
-### Your game
+#### Your game
 
 Let's say your game looks like this:  
 <img src="media/slso8-examples.png" width="300" alt="an image of your game">
 
-### The color palette you used
+#### The color palette you used
 
 It looks great and consistent because it only uses colors from your color palette.  
 <img src="media/slso8.png" width="300" alt="color palette">
 
-### Non-matching assets from other sources
+#### Non-matching assets from other sources
 
 Unfortunately, this [asset pack](https://cainos.itch.io/pixel-art-top-down-basic) you found
 on [insert market place here] and you always wanted to integrate into the game, does not match your art style.  
 <img src="media/art_by_cainos.png" width="300" alt="image of a game asset pack">
 
-### Fix it
+#### Fix it
 
 That's where this tool comes into action.
 
@@ -47,21 +47,21 @@ java -jar lesscolors.jar --input "originalImage.png" -- palette "myPalette.png" 
 Et voilà:  
 <img src="media/art_by_cainos-slso8.png" width="300" alt="fixed version of the game asset pack">
 
-## Stylize Textures
+### Stylize Textures
 
 <div style="display: flex; flex-wrap: wrap; column-gap: 10px;">
     <img src="media/widopeakwindowswall.jpg" width="300" alt="image of a texture">
     <img src="media/widopeakwindowswall_slso8.png" width="300" alt="modified image of a texture">
 </div>
 
-## Stylize Familiy Photos (to convince your grandpa of your hacker skills)
+### Stylize Familiy Photos (to convince your grandpa of your hacker skills)
 
 <div style="display: flex; flex-wrap: wrap; column-gap: 10px;">
     <img src="media/josue-michel-OMl0o6TSQXU-unsplash.jpg" width="300" alt="family photo">
     <img src="media/josue-michel-OMl0o6TSQXU-unsplash-slso8.png" width="300" alt="modified family photo">
 </div>
 
-# Documentation (CLI App)
+## Documentation (CLI App)
 
 | Argument      | Description                                                                 |
 |---------------|-----------------------------------------------------------------------------|
@@ -70,7 +70,7 @@ Et voilà:
 | --output      | The path to the output file (will be created in the process).               |
 | --output-type | [Optional] The output file format, "png", "jpg", etc. The default is "png". |
 
-# Installation
+## Installation
 
 For the cli app it's just a jar. Download [here](https://github.com/Hangman/lesscolors/releases).  
 <br>
@@ -93,3 +93,13 @@ dependencies {
 
 For specific commit versions, branches, or if you want to use Maven, check out
 lesscolor's [Jitpack page](https://jitpack.io/#Hangman/lesscolors).
+
+## Roadmap
+
+#### Version 0.2.0
+- [ ] Batch-processing of all images inside a folder + optional flag to include sub-folders (default: exclude)
+- [ ] Let users choose the colorspace that will be used for color correction (default: LAB)
+
+#### Version 1.0.0
+- [ ] Add multiple ways to handle transparency
+- [ ] Add tests
