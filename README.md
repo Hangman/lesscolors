@@ -41,24 +41,21 @@ on [insert market place here] and you always wanted to integrate into the game, 
 That's where this tool comes into action.
 
 ```console
-java -jar lesscolors.jar --input "originalImage.png" -- palette "myPalette.png" --output "fixedImage.png"
+java -jar lesscolors.jar --input "originalImage.png" --palette "myPalette.png" --output "fixedImage.png"
 ```
 
 Et voilà:  
 <img src="media/art_by_cainos-slso8.png" width="300" alt="fixed version of the game asset pack">
 
-### Stylize Textures
+### Stylize Images, Textures, etc.
 
 <div style="display: flex; flex-wrap: wrap; column-gap: 10px;">
-    <img src="media/widopeakwindowswall.jpg" width="300" alt="image of a texture">
-    <img src="media/widopeakwindowswall_slso8.png" width="300" alt="modified image of a texture">
+    <img src="media/widopeakwindowswall.jpg" width="200" alt="image of a texture">
+    <img src="media/widopeakwindowswall_slso8.png" width="200" alt="modified image of a texture">
 </div>
-
-### Stylize Familiy Photos (to convince your grandpa of your hacker skills)
-
 <div style="display: flex; flex-wrap: wrap; column-gap: 10px;">
-    <img src="media/josue-michel-OMl0o6TSQXU-unsplash.jpg" width="300" alt="family photo">
-    <img src="media/josue-michel-OMl0o6TSQXU-unsplash-slso8.png" width="300" alt="modified family photo">
+    <img src="media/josue-michel-OMl0o6TSQXU-unsplash.jpg" width="200" alt="family photo">
+    <img src="media/josue-michel-OMl0o6TSQXU-unsplash-slso8.png" width="200" alt="modified family photo">
 </div>
 
 ## Documentation (CLI App)
