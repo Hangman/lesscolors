@@ -98,5 +98,7 @@ lesscolor's [Jitpack page](https://jitpack.io/#Hangman/lesscolors).
 - [ ] Let users choose the colorspace that will be used for color correction (default: LAB)
 
 #### Version 1.0.0
+- [ ] Refine lib sub project architecture and API
 - [ ] Add multiple ways to handle transparency
 - [ ] Add tests
+- [ ] Rebuild README.md images
