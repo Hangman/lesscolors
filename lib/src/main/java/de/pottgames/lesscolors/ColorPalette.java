@@ -71,7 +71,7 @@ public class ColorPalette implements Iterable<Color> {
         float closestDistance = Float.MAX_VALUE;
 
         for (Color color : this.colors) {
-            float distance = color.labDistance(other);
+            float distance = color.oklabDistance(other);
             if (distance < closestDistance) {
                 closestDistance = distance;
                 closestColor = color;
