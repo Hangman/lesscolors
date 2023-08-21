@@ -16,7 +16,10 @@
 
 package de.pottgames.lesscolors;
 
-import java.util.Objects;
+import com.github.ajalt.colormath.calculate.DifferenceKt;
+import com.github.ajalt.colormath.model.LAB;
+import com.github.ajalt.colormath.model.Oklab;
+import com.github.ajalt.colormath.model.RGB;
 
 /**
  * Represents a color with components and color space information.
@@ -173,15 +176,33 @@ public class Color {
      * Calculates the LAB color distance between this color and another color.
      *
      * @param other The other color.
-     * @return The LAB color distance between the two colors.
+     * @return The LAB color distance between the two colors, using the CIE2000 difference metric.
      */
     public float labDistance(Color other) {
-        Color comp1 = this.colorSpace == ColorSpace.LAB ? this : this.toLab();
-        Color comp2 = other.colorSpace == ColorSpace.LAB ? other : other.toLab();
-        double lSquare = Math.pow(comp1.component1 - comp2.component1, 2d);
-        double aSquare = Math.pow(comp1.component2 - comp2.component2, 2d);
-        double bSquare = Math.pow(comp1.component3 - comp2.component3, 2d);
-        return (float) Math.sqrt(lSquare + aSquare + bSquare);
+        com.github.ajalt.colormath.Color comp1 = this.colorSpace == ColorSpace.LAB ?
+                LAB.Companion.invoke(this.component1, this.component2, this.component3, this.component4) :
+                RGB.Companion.invoke(this.component1, this.component2, this.component3, this.component4);
+        com.github.ajalt.colormath.Color comp2 = other.colorSpace == ColorSpace.LAB ?
+                LAB.Companion.invoke(other.component1, other.component2, other.component3, other.component4) :
+                RGB.Companion.invoke(other.component1, other.component2, other.component3, other.component4);
+        return DifferenceKt.differenceCIE2000(comp1, comp2);
+    }
+
+
+    /**
+     * Calculates the Oklab color distance between this color and another color.
+     *
+     * @param other The other color.
+     * @return The Oklab color distance between the two colors, using Euclidean distance in Oklab space.
+     */
+    public float oklabDistance(Color other) {
+        Oklab comp1 = this.colorSpace == ColorSpace.LAB ?
+                LAB.Companion.invoke(this.component1, this.component2, this.component3, this.component4).toOklab() :
+                RGB.Companion.invoke(this.component1, this.component2, this.component3, this.component4).toOklab();
+        Oklab comp2 = other.colorSpace == ColorSpace.LAB ?
+                LAB.Companion.invoke(other.component1, other.component2, other.component3, other.component4).toOklab() :
+                RGB.Companion.invoke(other.component1, other.component2, other.component3, other.component4).toOklab();
+        return DifferenceKt.euclideanDistance(comp1, comp2);
     }
 
 
@@ -217,13 +238,33 @@ public class Color {
 
 
     /**
-     * Generates a hash code for this color object.
+     * Generates a hash code for this Color object.
      *
      * @return The hash code.
      */
     @Override
     public int hashCode() {
-        return Objects.hash(component1, component2, component3, component4, colorSpace);
+        int result = (component1 != 0f ? Float.floatToIntBits(component1) : 0);
+        result = 31 * result + (component2 != 0f ? Float.floatToIntBits(component2) : 0);
+        result = 31 * result + (component3 != 0f ? Float.floatToIntBits(component3) : 0);
+        result = 31 * result + (component4 != 0f ? Float.floatToIntBits(component4) : 0);
+        result = 31 * result + (colorSpace != null ? colorSpace.hashCode() : 0);
+        return result;
+    }
+
+
+    @Override
+    public String toString() {
+        switch (this.colorSpace) {
+            case LAB:
+                return "Color {L=" + component1 + ", A=" + component2 + ", B=" + component3 + ", Alpha=" + component4 +
+                       "}";
+            case RGB:
+                return "Color {Red=" + component1 + ", Green=" + component2 + ", Blue=" + component3 + ", Alpha=" +
+                       component4 + "}";
+            default:
+                return "Color {invalid colorspace}";
+        }
     }
 
 
