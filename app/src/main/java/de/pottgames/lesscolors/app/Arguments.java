@@ -3,32 +3,35 @@
  *
  * Copyright (c) 2023 Matthias Finke
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package de.pottgames.lesscolors.app;
 
 import com.beust.jcommander.Parameter;
 
+import de.pottgames.lesscolors.ColorSpace;
+
 public class Arguments {
-    @Parameter(names = {"-input", "--input"}, description = "Path to the input image")
+    @Parameter(names = { "-input", "--input" }, description = "Path to the input image")
     public String inputPath;
 
-    @Parameter(names = {"-output", "--output"}, description = "The output image path")
+    @Parameter(names = { "-output", "--output" }, description = "The output image path")
     public String outputPath;
 
-    @Parameter(names = {"-output-type", "--output-type"}, description = "File format of the output image")
+    @Parameter(names = { "-output-type", "--output-type" }, description = "File format of the output image")
     public String outputImageType = "png";
 
-    @Parameter(names = {"-palette", "--palette", "-lut", "--lut"}, description = "Path to the color palette image")
+    @Parameter(names = { "-palette", "--palette", "-lut", "--lut" }, description = "Path to the color palette image")
     public String paletteImagePath;
+
+    @Parameter(names = { "-color-space", "--color-space", "-colorspace", "--colorspace" }, description = "The colorspace to be used for the images")
+    public String colorSpace = ColorSpace.OKLAB.toString();
 
 }

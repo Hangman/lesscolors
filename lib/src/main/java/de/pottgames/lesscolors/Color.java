@@ -3,84 +3,59 @@
  *
  * Copyright (c) 2023 Matthias Finke
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 package de.pottgames.lesscolors;
+
+import java.util.Objects;
 
 import com.github.ajalt.colormath.calculate.DifferenceKt;
 import com.github.ajalt.colormath.model.LAB;
 import com.github.ajalt.colormath.model.Oklab;
 import com.github.ajalt.colormath.model.RGB;
+import com.github.ajalt.colormath.model.XYZ;
 
 /**
- * Represents a color with components and color space information.
+ * Represents a color.
  */
 public class Color {
-    private final float      component1;
-    private final float      component2;
-    private final float      component3;
-    private final float      component4;
-    private final ColorSpace colorSpace;
-
-
-    /**
-     * This is a low level constructor, consider using one of the static creation functions like
-     * {@link Color#fromRgb(float, float, float, float)} first.<br> Constructs a new color object with the specified
-     * components and color space.
-     *
-     * @param component1 The first color component.
-     * @param component2 The second color component.
-     * @param component3 The third color component.
-     * @param component4 The fourth color component.
-     * @param space      The color space in which the components are defined.
-     */
-    public Color(float component1, float component2, float component3, float component4, ColorSpace space) {
-        this.component1 = component1;
-        this.component2 = component2;
-        this.component3 = component3;
-        this.component4 = component4;
-        this.colorSpace = space;
-    }
+    protected final com.github.ajalt.colormath.Color color;
 
 
     /**
      * Creates a new Color object from RGBA values ranging from 0.0 to 1.0.
      *
-     * @param r     The red component.
-     * @param g     The green component.
-     * @param b     The blue component.
+     * @param r The red component.
+     * @param g The green component.
+     * @param b The blue component.
      * @param alpha The alpha component.
+     *
      * @return A Color object representing the specified RGBA values.
      */
-    public static Color fromRgb(float r, float g, float b, float alpha) {
-        return new Color(r, g, b, alpha, ColorSpace.RGB);
+    public static Color fromRGBA(float r, float g, float b, float alpha) {
+        return new Color(RGB.Companion.invoke(r, g, b, alpha));
     }
 
 
     /**
      * Creates a new Color object from RGBA integers, each component has 8 bits of precision.
      *
-     * @param r     The red component as an integer (0-255).
-     * @param g     The green component as an integer (0-255).
-     * @param b     The blue component as an integer (0-255).
+     * @param r The red component as an integer (0-255).
+     * @param g The green component as an integer (0-255).
+     * @param b The blue component as an integer (0-255).
      * @param alpha The alpha component as an integer (0-255).
+     *
      * @return A Color object representing the specified RGBA values.
      */
-    public static Color fromRgbInt(int r, int g, int b, int alpha) {
-        float component1 = r / 255f;
-        float component2 = g / 255f;
-        float component3 = b / 255f;
-        float component4 = alpha / 255f;
-        return new Color(component1, component2, component3, component4, ColorSpace.RGB);
+    public static Color fromRGBInts(int r, int g, int b, int alpha) {
+        return new Color(RGB.Companion.from255(r, g, b, alpha));
     }
 
 
@@ -88,68 +63,20 @@ public class Color {
      * Creates a new Color object from an ARGB integer representation.
      *
      * @param argb The ARGB integer value.
+     *
      * @return A Color object representing the specified ARGB value.
      */
-    public static Color fromArgbInt(int argb) {
-        int a = (argb >>> 24) & 0xFF;
-        int r = (argb >>> 16) & 0xFF;
-        int g = (argb >>> 8) & 0xFF;
-        int b = argb & 0xFF;
-        return fromRgbInt(r, g, b, a);
+    public static Color fromARGBInt(int argb) {
+        final int a = argb >>> 24 & 0xFF;
+        final int r = argb >>> 16 & 0xFF;
+        final int g = argb >>> 8 & 0xFF;
+        final int b = argb & 0xFF;
+        return Color.fromRGBInts(r, g, b, a);
     }
 
 
-    /**
-     * Creates a new Color object from LAB color space components.
-     *
-     * @param l     The lightness component (L) in LAB color space.
-     * @param a     The green-red component (a) in LAB color space.
-     * @param b     The blue-yellow component (b) in LAB color space.
-     * @param alpha The alpha (transparency) component.
-     * @return A Color object representing the specified LAB color space values.
-     */
-    public static Color fromLab(float l, float a, float b, float alpha) {
-        return new Color(l, a, b, alpha, ColorSpace.LAB);
-    }
-
-
-    /**
-     * Converts the color to the RGB color space.
-     *
-     * @return A new Color object representing the color in the RGB color space.
-     */
-    public Color toRgb() {
-        switch (this.colorSpace) {
-            case RGB:
-                return this.copy();
-            case LAB:
-                int[] rgb = ColorConversionUtil.labToRgb(component1, component2, component3, component4);
-                return Color.fromRgbInt(rgb[0], rgb[1], rgb[2], rgb[3]);
-            default:
-                return null;
-        }
-    }
-
-
-    /**
-     * Converts the color to the LAB color space.
-     *
-     * @return A new Color object representing the color in the LAB color space.
-     */
-    public Color toLab() {
-        switch (this.colorSpace) {
-            case RGB:
-                int r = (int) (component1 * 255f);
-                int g = (int) (component2 * 255f);
-                int b = (int) (component3 * 255f);
-                int a = (int) (component4 * 255f);
-                float[] lab = ColorConversionUtil.rgbToLab(r, g, b, a);
-                return Color.fromLab(lab[0], lab[1], lab[2], lab[3]);
-            case LAB:
-                return this.copy();
-            default:
-                return null;
-        }
+    protected Color(com.github.ajalt.colormath.Color color) {
+        this.color = color;
     }
 
 
@@ -159,120 +86,181 @@ public class Color {
      * @return An integer value representing the color in ARGB format.
      */
     public int toArgbInt() {
-        Color color = this.colorSpace == ColorSpace.RGB ? this : this.toRgb();
-        int r = (int) (color.component1 * 255f);
-        int g = (int) (color.component2 * 255f);
-        int b = (int) (color.component3 * 255f);
-        int a = (int) (color.component4 * 255f);
-        assert r >= 0 && r <= 255;
-        assert g >= 0 && g <= 255;
-        assert b >= 0 && b <= 255;
-        assert a >= 0 && a <= 255;
+        final RGB rgb = this.color.toSRGB();
+        final int b = rgb.getBlueInt();
+        final int g = rgb.getGreenInt();
+        final int r = rgb.getRedInt();
+        final int a = rgb.getAlphaInt();
         return b | g << 8 | r << 16 | a << 24;
     }
 
 
     /**
-     * Calculates the LAB color distance between this color and another color.
+     * Returns a new Color object representing this color in the specified color space. If this color is in the desired color space, this object is returned
+     * instead.
      *
-     * @param other The other color.
-     * @return The LAB color distance between the two colors, using the CIE2000 difference metric.
+     * @param colorSpace
+     *
+     * @return
      */
-    public float labDistance(Color other) {
-        com.github.ajalt.colormath.Color comp1 = this.colorSpace == ColorSpace.LAB ?
-                LAB.Companion.invoke(this.component1, this.component2, this.component3, this.component4) :
-                RGB.Companion.invoke(this.component1, this.component2, this.component3, this.component4);
-        com.github.ajalt.colormath.Color comp2 = other.colorSpace == ColorSpace.LAB ?
-                LAB.Companion.invoke(other.component1, other.component2, other.component3, other.component4) :
-                RGB.Companion.invoke(other.component1, other.component2, other.component3, other.component4);
-        return DifferenceKt.differenceCIE2000(comp1, comp2);
+    public Color toColorSpace(ColorSpace colorSpace) {
+        if (this.getColorSpace() != colorSpace) {
+            switch (colorSpace) {
+                case RGB:
+                    return new Color(this.color.toSRGB());
+                case OKLAB:
+                    return new Color(this.color.toOklab());
+                case LAB:
+                    return new Color(this.color.toLAB());
+                case XYZ:
+                    return new Color(this.color.toXYZ());
+            }
+            throw new IllegalArgumentException("colorSpace must not be null");
+        }
+        return this;
     }
 
 
     /**
-     * Calculates the Oklab color distance between this color and another color.
+     * Returns the color space of this color.
      *
-     * @param other The other color.
-     * @return The Oklab color distance between the two colors, using Euclidean distance in Oklab space.
+     * @return the color space of this color
      */
-    public float oklabDistance(Color other) {
-        Oklab comp1 = this.colorSpace == ColorSpace.LAB ?
-                LAB.Companion.invoke(this.component1, this.component2, this.component3, this.component4).toOklab() :
-                RGB.Companion.invoke(this.component1, this.component2, this.component3, this.component4).toOklab();
-        Oklab comp2 = other.colorSpace == ColorSpace.LAB ?
-                LAB.Companion.invoke(other.component1, other.component2, other.component3, other.component4).toOklab() :
-                RGB.Companion.invoke(other.component1, other.component2, other.component3, other.component4).toOklab();
-        return DifferenceKt.euclideanDistance(comp1, comp2);
+    public ColorSpace getColorSpace() {
+        if (this.color instanceof RGB) {
+            return ColorSpace.RGB;
+        }
+        if (this.color instanceof Oklab) {
+            return ColorSpace.OKLAB;
+        }
+        if (this.color instanceof LAB) {
+            return ColorSpace.LAB;
+        }
+        if (this.color instanceof XYZ) {
+            return ColorSpace.XYZ;
+        }
+
+        return null;
     }
 
 
     /**
-     * Creates a copy of this color.
+     * Calculates the color distance between this color and another color using the color space of this color.
      *
-     * @return A new Color object that is a copy of this color.
+     * @param other The other color for which to calculate the distance.
+     *
+     * @return The color distance between this color and the other color.
      */
-    public Color copy() {
-        return new Color(component1, component2, component3, component4, colorSpace);
+    public float distance(Color other) {
+        return this.distance(other, this.getColorSpace());
     }
 
 
     /**
-     * Checks if this color is equal to another object.
+     * Calculates the color distance between this color and another color in the specified color space.
      *
-     * @param o The object to compare with.
-     * @return True if the objects are equal, false otherwise.
+     * @param other The other color for which to calculate the distance.
+     * @param colorSpace The color space in which to compute the color distance.
+     *
+     * @return The color distance between this color and the other color in the specified color space.
      */
+    public float distance(Color other, ColorSpace colorSpace) {
+        switch (colorSpace) {
+            case RGB:
+                return Color.rgbDistance(this, other);
+            case LAB:
+                return Color.labDistance(this, other);
+            case OKLAB:
+                return Color.oklabDistance(this, other);
+            case XYZ:
+                return Color.xyzDistance(this, other);
+        }
+        throw new IllegalArgumentException("Invalid ColorSpace: " + colorSpace);
+    }
+
+
+    /**
+     * Calculates the RGB color distance between two colors.
+     *
+     * @param color1 The first color.
+     * @param color2 The second color.
+     *
+     * @return The RGB color distance between the two colors.
+     */
+    public static float rgbDistance(Color color1, Color color2) {
+        Objects.requireNonNull(color1);
+        Objects.requireNonNull(color2);
+        return DifferenceKt.euclideanDistance(color1.color.toSRGB(), color2.color.toSRGB());
+    }
+
+
+    /**
+     * Calculates the LAB color distance between two colors.
+     *
+     * @param color1 The first color.
+     * @param color2 The second color.
+     *
+     * @return The LAB color distance between the two colors.
+     */
+    public static float labDistance(Color color1, Color color2) {
+        Objects.requireNonNull(color1);
+        Objects.requireNonNull(color2);
+        return DifferenceKt.differenceCIE2000(color1.color.toLAB(), color2.color.toLAB());
+    }
+
+
+    /**
+     * Calculates the Oklab color distance between two colors.
+     *
+     * @param color1 The first color.
+     * @param color2 The second color.
+     *
+     * @return The Oklab color distance between the two colors.
+     */
+    public static float oklabDistance(Color color1, Color color2) {
+        Objects.requireNonNull(color1);
+        Objects.requireNonNull(color2);
+        return DifferenceKt.euclideanDistance(color1.color.toOklab(), color2.color.toOklab());
+    }
+
+
+    /**
+     * Calculates the XYZ color distance between two colors.
+     *
+     * @param color1 The first color.
+     * @param color2 The second color.
+     *
+     * @return The XYZ color distance between the two colors.
+     */
+    public static float xyzDistance(Color color1, Color color2) {
+        Objects.requireNonNull(color1);
+        Objects.requireNonNull(color2);
+        return DifferenceKt.euclideanDistance(color1.color.toXYZ(), color2.color.toXYZ());
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (o == null || this.getClass() != o.getClass()) {
             return false;
         }
-        Color color = (Color) o;
-        return Float.compare(component1, color.component1) == 0 && Float.compare(component2, color.component2) == 0 &&
-               Float.compare(component3, color.component3) == 0 && Float.compare(component4, color.component4) == 0 &&
-               colorSpace == color.colorSpace;
+        final Color otherColor = (Color) o;
+        return this.color.equals(otherColor.color);
     }
 
 
-    /**
-     * Generates a hash code for this Color object.
-     *
-     * @return The hash code.
-     */
     @Override
     public int hashCode() {
-        int result = (component1 != 0f ? Float.floatToIntBits(component1) : 0);
-        result = 31 * result + (component2 != 0f ? Float.floatToIntBits(component2) : 0);
-        result = 31 * result + (component3 != 0f ? Float.floatToIntBits(component3) : 0);
-        result = 31 * result + (component4 != 0f ? Float.floatToIntBits(component4) : 0);
-        result = 31 * result + (colorSpace != null ? colorSpace.hashCode() : 0);
-        return result;
+        return this.color.hashCode();
     }
 
 
     @Override
     public String toString() {
-        switch (this.colorSpace) {
-            case LAB:
-                return "Color {L=" + component1 + ", A=" + component2 + ", B=" + component3 + ", Alpha=" + component4 +
-                       "}";
-            case RGB:
-                return "Color {Red=" + component1 + ", Green=" + component2 + ", Blue=" + component3 + ", Alpha=" +
-                       component4 + "}";
-            default:
-                return "Color {invalid colorspace}";
-        }
-    }
-
-
-    /**
-     * Enumeration of supported color spaces.
-     */
-    public enum ColorSpace {
-        RGB, LAB
+        return this.color.toString();
     }
 
 }
